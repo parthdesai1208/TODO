@@ -8,6 +8,7 @@ import com.arch.template.R
 import com.arch.template.base.BaseActivity
 import com.arch.template.databinding.ActivitySplashBinding
 import com.arch.template.ui.feature.login.LoginActivity
+import com.arch.template.ui.feature.note.NoteListingActivity
 import com.arch.template.utils.MyAppLogger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -28,7 +29,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
                 if (navigation) {
                     startActivity(
                         Intent(
-                            this@SplashActivity, LoginActivity::class.java
+                            this@SplashActivity, NoteListingActivity::class.java
                         )
                     )
                     finish()

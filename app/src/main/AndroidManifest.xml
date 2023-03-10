@@ -45,6 +45,10 @@
         <activity
             android:name="com.arch.template.ui.feature.geolocation.GeolocationActivity"
             android:theme="@style/Theme.BlueprintApplication.NoActionBar" />
+        <activity android:name=".ui.feature.note.NoteListingActivity" />
+        <activity
+            android:name=".ui.feature.note.AddNoteActivity"
+            android:theme="@style/Theme.BlueprintApplication.NoActionBar" />
     </application>
 
 </manifest>
