@@ -23,6 +23,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.Launcher" parent="Theme.BlueprintApplication.NoActionBar">
+        <item  name="android:windowDisablePreview">true</item>
+    </style>
+
     <style name="Theme.BlueprintApplication.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.BlueprintApplication.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

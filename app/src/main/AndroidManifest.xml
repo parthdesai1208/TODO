@@ -26,7 +26,7 @@
         <activity
             android:name="com.arch.template.ui.feature.splash.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.BlueprintApplication.NoActionBar">
+            android:theme="@style/Theme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
