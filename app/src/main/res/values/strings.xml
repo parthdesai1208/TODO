@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="splash_label_create_account">Create Account</string>
+    <string name="splash_label_easy_secure">Easy.\nFast.\nSecure.</string>
+    <string name="splash_label_create_account_in_min">Create Your Account in few minutes</string>
+    <string name="login_hint_email">Enter your email</string>
+    <string name="login_hint_password">Enter your password</string>
+    <string name="login_btn_login">Login</string>
+    <string name="app_error_empty_email">Please enter email</string>
+    <string name="app_error_empty_password">Please enter password</string>
+    <string name="app_error_invalid_email">Please enter valid email</string>
+    <string name="dashboard_label_header_app">Blueprint app</string>
+    <string name="alert_error_title">Error</string>
+    <string name="alert_error_message">Unknown Error</string>
+    <string name="alert_error_positive">OK</string>
+    <string name="login_header_login">Login in to \nYour Account</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_dont_want_to_login">Don\'t want to login?</string>
+    <string name="login_skip">SKIP</string>
+    <string name="login_email">eve.holt@reqres.in</string>
+    <string name="login_password">cityslicka</string>
+    <string name="resource_permission_denied">Permission denied</string>
+    <string name="generic_error">Something went wrong, Please try again.</string>
+    <string name="location_request_start">Location Start</string>
+    <string name="location_request_stop">Location Stop</string>
+    <string name="login_btn_biometric">Biometric Login</string>
+    <string name="or">Or</string>
+    <string name="profile_add_photo">Add Photo</string>
+    <string name="profile_add_description">Take a picture or upload it\n from your phone</string>
+    <string name="profile_btn_gallery">Gallery</string>
+    <string name="profile_btn_camera">Camera</string>
+    <string name="profile_btn_file">File</string>
+    <string name="geolocation_location">Location</string>
+    <string name="geolocation_description">Fetch Live Location information</string>
+    <string name="geolocation_prop_location">Location</string>
+    <string name="geolocation_prop_latitude">Latitude</string>
+    <string name="geolocation_prop_longitude">Longitude</string>
+    <string name="geolocation_prop_speed">Speed</string>
+</resources>

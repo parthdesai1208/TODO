@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.arch.template">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+
+    <application
+        android:name=".BlueprintApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BlueprintApplication">
+
+        <provider
+            android:name="com.google.firebase.provider.FirebaseInitProvider"
+            android:authorities="com.arch.template.firebaseinitprovider"
+            tools:replace="android:authorities" />
+
+        <activity
+            android:name="com.arch.template.ui.feature.splash.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BlueprintApplication.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.arch.template.ui.feature.login.LoginActivity"
+            android:theme="@style/Theme.BlueprintApplication.NoActionBar" />
+        <activity
+            android:name="com.arch.template.ui.feature.resource.ResourceActivity"
+            android:theme="@style/Theme.BlueprintApplication.NoActionBar" />
+        <activity
+            android:name="com.arch.template.ui.feature.profile.ProfileActivity"
+            android:theme="@style/Theme.BlueprintApplication.NoActionBar" />
+        <activity
+            android:name="com.arch.template.ui.feature.geolocation.GeolocationActivity"
+            android:theme="@style/Theme.BlueprintApplication.NoActionBar" />
+    </application>
+
+</manifest>

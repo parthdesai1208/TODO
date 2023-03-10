@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+    id 'kotlin-kapt'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    //std lib
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(path: ':utils')
+
+
+    implementation AppDependencies.hiltCore
+    implementation AppDependencies.javaxInject
+
+    //kpat libs
+    kapt AppDependencies.hiltCoreCompiler
+    kapt AppDependencies.hiltAndroidCompiler
+
+    //paging
+    implementation AppDependencies.pagingCoreCommon
+
+    //test libs
+    testImplementation(AppDependencies.testLibraries)
+
+
+
+}
