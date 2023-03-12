@@ -5,4 +5,5 @@ sealed class AppErrorType {
     object PasswordEmpty : AppErrorType()
     object InvalidEmail : AppErrorType()
     object None : AppErrorType()
+    object NoteContentEmpty : AppErrorType()
 }

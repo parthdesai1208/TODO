@@ -3,7 +3,10 @@ package com.arch.data.di
 import android.app.Application
 import com.arch.data.database.AppDatabase
 import com.arch.data.database.DatabaseProperties
+import com.arch.data.database.dao.NoteEntityDao
 import com.arch.data.database.dao.UserEntityDao
+import com.arch.data.source.note.local.NoteLocalDataSource
+import com.arch.data.source.note.local.NoteLocalDataSourceImpl
 import com.arch.data.source.user.local.UserLocalDataSource
 import com.arch.data.source.user.local.UserLocalDataSourceImpl
 import dagger.Module
@@ -29,4 +32,13 @@ class LocalModule {
     @Provides
     fun userLocalSource(userEntityDao: UserEntityDao): UserLocalDataSource =
         UserLocalDataSourceImpl(userEntityDao)
+
+    @Provides
+    fun provideNoteDao(appDatabase: AppDatabase): NoteEntityDao =
+        appDatabase.noteDao()
+
+    @Singleton
+    @Provides
+    fun noteLocalSource(noteEntityDao: NoteEntityDao): NoteLocalDataSource =
+        NoteLocalDataSourceImpl(noteEntityDao)
 }

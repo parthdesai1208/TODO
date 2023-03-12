@@ -39,4 +39,6 @@
     <string name="geolocation_prop_speed">Speed</string>
     <string name="add_note_icon">Add note</string>
     <string name="note">Note</string>
+    <string name="saveSuccessMessage">Saved!</string>
+    <string name="app_error_empty_note_content">Please enter note content</string>
 </resources>

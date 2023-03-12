@@ -10,6 +10,7 @@ import com.arch.errors.android.handler.IAndroidExceptionHandler
 import com.arch.errors.android.presenter.IAndroidErrorPresenter
 import com.arch.errors.android.presenter.SelectorAndroidErrorPresenter
 import com.arch.logger.AppLogger
+import com.arch.presentation.di.qualifier.AddNoteViewModelExceptionHandler
 import com.arch.presentation.di.qualifier.LoginViewModelExceptionHandler
 import dagger.Module
 import dagger.Provides
@@ -45,5 +46,27 @@ class ViewModelModule {
             }
         )
 
-
+    @Provides
+    @AddNoteViewModelExceptionHandler
+    fun addNoteViewModelExceptionHandler(
+        appLogger: AppLogger,
+        @AlertPresenter alertPresenter: IAndroidErrorPresenter<String>,
+        @SnackBarPresenter snackBarPresenter: IAndroidErrorPresenter<String>
+    ): IAndroidExceptionHandler =
+        AndroidExceptionHandlerImpl(
+            androidErrorPresenter = SelectorAndroidErrorPresenter {
+                when (it) {
+                    is AppError -> {
+                        alertPresenter
+                    }
+                    else -> {
+                        snackBarPresenter
+                    }
+                }
+            },
+            exceptionMapper = ExceptionMappers.throwableMapper(),
+            onCatch = {
+                appLogger.d("Got exception: $it")
+            }
+        )
 }

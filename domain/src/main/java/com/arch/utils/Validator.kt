@@ -11,5 +11,9 @@ class Validator {
         fun isValidEmail(value: String): Boolean {
             return value.isValidEmail()
         }
+
+        fun isBlank(value: String): Boolean {
+            return value.isBlank()
+        }
     }
 }
