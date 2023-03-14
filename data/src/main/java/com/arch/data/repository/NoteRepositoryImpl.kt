@@ -12,10 +12,17 @@ import javax.inject.Inject
 class NoteRepositoryImpl @Inject constructor(
     private val noteLocalDataSource: NoteLocalDataSource
 ) : NoteRepository {
-    override suspend fun insertNote(noteContent: String): Either<DatabaseError, Boolean> {
-        val noteEntity = NoteEntity(noteContent = noteContent)
+    override suspend fun insertNote(
+        noteId: Int,
+        noteContent: String
+    ): Either<DatabaseError, Boolean> {
+        val noteEntity = if (noteId == 0) NoteEntity(noteContent = noteContent) else NoteEntity(
+            noteId = noteId,
+            noteContent = noteContent
+        )
         val databaseStatus = noteLocalDataSource.saveNote(noteEntity)
         return if (databaseStatus) {
+//            delay(2000) //TODO simulate delay
             Either.Right(true)
         } else {
             Either.Left(
@@ -28,8 +35,8 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNotes(pagingConfig: PagingConfig): Either<DatabaseError, List<Note>> {
-       /* var returnResponse: Either<DatabaseError, Pager<Int, Note>> =
-            Either.Left(DatabaseError(message = "", dbErrorCode = 1))*/
+        /* var returnResponse: Either<DatabaseError, Pager<Int, Note>> =
+             Either.Left(DatabaseError(message = "", dbErrorCode = 1))*/
         val notes = noteLocalDataSource.getNotes(pagingConfig)
         return if (notes.isNotEmpty()) {
             Either.Right(notes)

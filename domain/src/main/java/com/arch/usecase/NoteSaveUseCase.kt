@@ -14,7 +14,7 @@ class NoteSaveUseCase @Inject constructor(
     private val noteRepository: NoteRepository,
 ) : BaseUseCase<NoteSaveUseCase.AuthNoteContent, Either<BaseError, Boolean>> {
 
-    class AuthNoteContent(val noteContent: String) : Params {
+    class AuthNoteContent(val noteId: Int, val noteContent: String) : Params {
         override fun verify(): Boolean {
             return if (Validator.isBlank(noteContent)) throw AppError(
                 appErrorType = AppErrorType.NoteContentEmpty,
@@ -26,6 +26,6 @@ class NoteSaveUseCase @Inject constructor(
     }
 
     override suspend fun execute(params: AuthNoteContent): Either<BaseError, Boolean> {
-        return noteRepository.insertNote(params.noteContent)
+        return noteRepository.insertNote(params.noteId,params.noteContent)
     }
 }

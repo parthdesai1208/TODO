@@ -31,10 +31,10 @@ class AddNoteViewModel @Inject constructor(
 
     val noteSavingFlow: StateFlow<Resource<Boolean>> = _noteSavingFlow
 
-    fun saveNote(noteContent: String) {
+    fun saveNote(noteId: Int, noteContent: String) {
         viewModelScope.launch {
             exceptionHandler.handle {
-                val authParams = NoteSaveUseCase.AuthNoteContent(noteContent)
+                val authParams = NoteSaveUseCase.AuthNoteContent(noteId,noteContent)
                 object : RequestManager<Boolean>(params = authParams) {
                     override suspend fun createCall(): Either<BaseError, Boolean> {
                         return noteSaveUseCase.execute(authParams)

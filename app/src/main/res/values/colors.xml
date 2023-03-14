@@ -11,4 +11,5 @@
     <color name="brown_grey">#a5a5a5</color>
     <color name="very_light_pink">#e5e5e5</color>
     <color name="blackWhite">#000000</color>
+    <color name="LoadingBackground">#33070707</color>
 </resources>

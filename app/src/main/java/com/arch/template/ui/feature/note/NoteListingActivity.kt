@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.arch.presentation.model.NotePresentation
 import com.arch.presentation.viewmodels.note.NoteListingViewModel
 import com.arch.template.R
 import com.arch.template.base.BaseActivity
@@ -15,7 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListingViewModel>() {
+class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListingViewModel>(),
+    NoteListingAdapter.OnNoteClickListener {
     override val viewModel by viewModels<NoteListingViewModel>()
     private lateinit var layoutManager: LinearLayoutManager
 
@@ -30,6 +32,7 @@ class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListing
 
         binding.viewModel = viewModel
 
+        noteListingAdapter.addItemClickListener(this)
         binding.rvNoteListing.adapter = noteListingAdapter
 
         layoutManager = binding.rvNoteListing.layoutManager as LinearLayoutManager
@@ -78,4 +81,18 @@ class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListing
         viewModel.setScrollPosition(layoutManager.findFirstCompletelyVisibleItemPosition())
     }
 
+    override fun onNoteClick(notePresentation: NotePresentation) {
+        openActivityForResult.launch(
+            Intent(
+                this@NoteListingActivity,
+                AddNoteActivity::class.java
+            ).apply {
+                putExtra(noteKey, notePresentation)
+            }
+        )
+    }
+
+    companion object {
+        const val noteKey = "note"
+    }
 }

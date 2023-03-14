@@ -10,8 +10,10 @@ import com.arch.presentation.model.NotePresentation
 import com.arch.template.R
 import com.arch.template.databinding.ItemNoteListingBinding
 
-class NoteListingAdapter : ListAdapter<NotePresentation, NoteListingAdapter.ViewHolder>(DiffUtilCallBack) {
+class NoteListingAdapter :
+    ListAdapter<NotePresentation, NoteListingAdapter.ViewHolder>(DiffUtilCallBack) {
 
+    lateinit var listener: OnNoteClickListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<ItemNoteListingBinding>(
             LayoutInflater.from(parent.context),
@@ -31,8 +33,15 @@ class NoteListingAdapter : ListAdapter<NotePresentation, NoteListingAdapter.View
         fun bind(item: NotePresentation) {
             with(binding) {
                 noteData = item
+                this.root.setOnClickListener {
+                    listener.onNoteClick(item)
+                }
             }
         }
+    }
+
+    fun addItemClickListener(listener: OnNoteClickListener) {
+        this.listener = listener
     }
 
     object DiffUtilCallBack : DiffUtil.ItemCallback<NotePresentation>() {
@@ -49,5 +58,9 @@ class NoteListingAdapter : ListAdapter<NotePresentation, NoteListingAdapter.View
         ): Boolean {
             return oldItem == newItem
         }
+    }
+
+    interface OnNoteClickListener {
+        fun onNoteClick(notePresentation: NotePresentation)
     }
 }
