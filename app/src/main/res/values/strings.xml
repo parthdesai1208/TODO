@@ -42,4 +42,7 @@
     <string name="saveSuccessMessage">Saved!</string>
     <string name="app_error_empty_note_content">Please enter note content</string>
     <string name="saving">Saving</string>
+    <string name="app_error_empty_note_id">Database error! try again later</string>
+    <string name="deleteSuccessMessage">Deleted!</string>
+    <string name="deleting">Deleting</string>
 </resources>

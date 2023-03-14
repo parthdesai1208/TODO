@@ -14,6 +14,7 @@ import com.arch.template.databinding.ActivityAddNoteBinding
 import com.arch.template.ui.feature.note.NoteListingActivity.Companion.noteKey
 import com.arch.template.utils.extension.showLongToast
 import com.arch.template.utils.extension.showShortToast
+import com.arch.utils.Resource
 import com.arch.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -38,26 +39,52 @@ class AddNoteActivity : BaseActivity<ActivityAddNoteBinding, AddNoteViewModel>()
             saveNoteOperation()
         }
 
+        binding.imgDelete.setOnClickListener {
+            note?.noteId?.let {
+                viewModel.deleteNote(it.toString())
+            }
+        }
+
         lifecycleScope.launchWhenResumed {
             viewModel.noteSavingFlow.collect {
                 when (it.status) {
                     Status.LOADING -> {
-                        updateUI(true)
+                        updateUI(true, loadingText = getString(R.string.saving))
                     }
                     Status.SUCCESS -> {
                         if (it.data == true) {
                             showShortToast(message = getString(R.string.saveSuccessMessage))
                             finishActivityAndUpdateListOfListActivity()
                         } else {
-                            it.error?.getFriendlyMessage()
-                                ?.let { it1 -> if (it1.isNotBlank()) showLongToast(message = it1) }
+                            showErrorToast(it)
                         }
-                        updateUI(false)
+                        updateUI(false, loadingText = getString(R.string.saving))
                     }
                     Status.ERROR -> {
-                        it.error?.getFriendlyMessage()
-                            ?.let { it1 -> if (it1.isNotBlank()) showLongToast(message = it1) }
-                        updateUI(false)
+                        showErrorToast(it)
+                        updateUI(false, loadingText = getString(R.string.saving))
+                    }
+                }
+            }
+        }
+        lifecycleScope.launchWhenResumed {
+            viewModel.noteDeleteFlow.collect {
+                when (it.status) {
+                    Status.LOADING -> {
+                        updateUI(true, loadingText = getString(R.string.deleting))
+                    }
+                    Status.SUCCESS -> {
+                        if (it.data == true) {
+                            showShortToast(message = getString(R.string.deleteSuccessMessage))
+                            finishActivityAndUpdateListOfListActivity()
+                        } else {
+                            showErrorToast(it)
+                        }
+                        updateUI(false, loadingText = getString(R.string.deleting))
+                    }
+                    Status.ERROR -> {
+                        showErrorToast(it)
+                        updateUI(false, loadingText = getString(R.string.deleting))
                     }
                 }
             }
@@ -70,6 +97,7 @@ class AddNoteActivity : BaseActivity<ActivityAddNoteBinding, AddNoteViewModel>()
                 binding.etNote.requestFocus()
                 binding.etNote.setSelection(binding.etNote.length())
             }
+            binding.imgDelete.visibility = View.VISIBLE
         }
     }
 
@@ -78,13 +106,14 @@ class AddNoteActivity : BaseActivity<ActivityAddNoteBinding, AddNoteViewModel>()
         finish()
     }
 
-    private fun updateUI(isLoading: Boolean) {
+    private fun updateUI(isLoading: Boolean, loadingText: String) {
         if (isLoading) {
             binding.rootActivityAddNote.setBackgroundColor(
                 ContextCompat.getColor(
                     this@AddNoteActivity, R.color.LoadingBackground
                 )
             )
+            binding.txtSaving.text = loadingText
             binding.txtSaving.visibility = View.VISIBLE
             binding.LoadingDot.visibility = View.VISIBLE
             val animation: Animation = AnimationUtils.loadAnimation(
@@ -96,6 +125,11 @@ class AddNoteActivity : BaseActivity<ActivityAddNoteBinding, AddNoteViewModel>()
             binding.txtSaving.visibility = View.GONE
             binding.LoadingDot.visibility = View.GONE
         }
+    }
+
+    private fun showErrorToast(it: Resource<Boolean>) {
+        it.error?.getFriendlyMessage()
+            ?.let { it1 -> if (it1.isNotBlank()) showLongToast(message = it1) }
     }
 
     override fun onBackPressed() {

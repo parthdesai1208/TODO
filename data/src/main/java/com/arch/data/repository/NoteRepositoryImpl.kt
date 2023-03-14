@@ -70,4 +70,19 @@ class NoteRepositoryImpl @Inject constructor(
          }*/
         //return returnResponse
     }
+
+    override suspend fun deleteNote(noteId: String): Either<DatabaseError, Boolean> {
+        val databaseStatus = noteLocalDataSource.deleteNote(noteId.toInt())
+        return if (databaseStatus) {
+//            delay(2000) //TODO simulate delay
+            Either.Right(true)
+        } else {
+            Either.Left(
+                DatabaseError(
+                    message = "Oops, something went wrong! There was an error with the database",
+                    dbErrorCode = 1 //represent generic error in SQLite database
+                )
+            )
+        }
+    }
 }

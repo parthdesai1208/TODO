@@ -30,11 +30,25 @@
             android:id="@+id/imgSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/baseline_save_24"
+            app:layout_constraintEnd_toStartOf="@id/imgDelete"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginEnd="16dp"
+            app:tint="@color/blackWhite" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/baseline_delete_24"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/blackWhite" />
+            app:tint="@color/blackWhite"
+            tools:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etNote"
@@ -55,7 +69,6 @@
             android:id="@+id/txtSaving"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/saving"
             android:textSize="32sp"
             android:textStyle="bold"
             android:visibility="gone"
@@ -63,6 +76,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/saving"
             tools:visibility="visible" />
 
         <View
@@ -72,9 +86,11 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/fullcircle"
             android:backgroundTint="@color/LoadingBackground"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/txtSaving"
             app:layout_constraintStart_toStartOf="@id/txtSaving"
-            app:layout_constraintTop_toBottomOf="@id/txtSaving" />
+            app:layout_constraintTop_toBottomOf="@id/txtSaving"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

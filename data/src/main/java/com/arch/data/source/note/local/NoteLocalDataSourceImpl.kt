@@ -26,4 +26,8 @@ class NoteLocalDataSourceImpl @Inject constructor(private val noteEntityDao: Not
              }
          )*/
     }
+
+    override suspend fun deleteNote(noteId: Int): Boolean {
+        return noteEntityDao.deleteByNoteId(noteId) > 0
+    }
 }

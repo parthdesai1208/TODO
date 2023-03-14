@@ -7,6 +7,7 @@ import com.arch.logger.AppLogger
 import com.arch.permissions.android.IAndroidPermissionsController
 import com.arch.presentation.di.qualifier.AddNoteViewModelExceptionHandler
 import com.arch.presentation.viewmodels.base.BaseViewModel
+import com.arch.usecase.NoteDeleteUseCase
 import com.arch.usecase.NoteSaveUseCase
 import com.arch.utils.Either
 import com.arch.utils.RequestManager
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNoteViewModel @Inject constructor(
     private val noteSaveUseCase: NoteSaveUseCase,
+    private val noteDeleteUseCase: NoteDeleteUseCase,
     @AddNoteViewModelExceptionHandler exceptionHandler: IAndroidExceptionHandler,
     permissionHandler: IAndroidPermissionsController,
     logger: AppLogger
@@ -31,16 +33,44 @@ class AddNoteViewModel @Inject constructor(
 
     val noteSavingFlow: StateFlow<Resource<Boolean>> = _noteSavingFlow
 
+    private val _noteDeleteFlow: MutableStateFlow<Resource<Boolean>> =
+        MutableStateFlow(Resource.error(""))
+
+    val noteDeleteFlow: StateFlow<Resource<Boolean>> = _noteDeleteFlow
+
+
     fun saveNote(noteId: Int, noteContent: String) {
         viewModelScope.launch {
             exceptionHandler.handle {
-                val authParams = NoteSaveUseCase.AuthNoteContent(noteId,noteContent)
+                val authParams = NoteSaveUseCase.AuthNoteContent(noteId, noteContent)
                 object : RequestManager<Boolean>(params = authParams) {
                     override suspend fun createCall(): Either<BaseError, Boolean> {
                         return noteSaveUseCase.execute(authParams)
                     }
                 }.asFlow().collect {
                     _noteSavingFlow.value = Resource(
+                        status = it.status,
+                        data = it.data ?: false,
+                        message = it.message,
+                        error = it.error
+                    )
+                }
+            }.catch<Exception> {
+                false
+            }.execute()
+        }
+    }
+
+    fun deleteNote(noteId: String) {
+        viewModelScope.launch {
+            exceptionHandler.handle {
+                val authParams = NoteDeleteUseCase.AuthNoteId(noteId)
+                object : RequestManager<Boolean>(params = authParams) {
+                    override suspend fun createCall(): Either<BaseError, Boolean> {
+                        return noteDeleteUseCase.execute(authParams)
+                    }
+                }.asFlow().collect {
+                    _noteDeleteFlow.value = Resource(
                         status = it.status,
                         data = it.data ?: false,
                         message = it.message,

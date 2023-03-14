@@ -8,4 +8,6 @@ interface NoteLocalDataSource {
     suspend fun saveNote(noteEntity: NoteEntity): Boolean
 
      fun getNotes(pageConfig: PagingConfig) : List<Note>
+
+     suspend fun deleteNote(noteId : Int) : Boolean
 }

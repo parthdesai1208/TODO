@@ -49,6 +49,14 @@ object AppExceptionMapper {
                     context.getString(R.string.app_error_empty_note_content)
                 }
             )
+            .condition(
+                condition = {
+                    (it is AppError) && it.appErrorType == AppErrorType.NoteContentEmpty
+                },
+                mapper = {
+                    context.getString(R.string.app_error_empty_note_id)
+                }
+            )
             .register<IllegalArgumentException, String> {
                 context.getString(R.string.dashboard_label_header_app)
             }
