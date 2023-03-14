@@ -1,5 +1,6 @@
 package com.arch.template.ui.feature.note
 
+import android.app.Activity
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.arch.presentation.viewmodels.note.AddNoteViewModel
@@ -22,8 +23,7 @@ class AddNoteActivity : BaseActivity<ActivityAddNoteBinding, AddNoteViewModel>()
         binding.viewModel = viewModel
 
         binding.imgBack.setOnClickListener {
-            if (binding.etNote.text.toString().isNotBlank()) saveNoteOperation()
-            finish()
+            onBackPressed()
         }
 
         binding.imgSave.setOnClickListener {
@@ -51,7 +51,16 @@ class AddNoteActivity : BaseActivity<ActivityAddNoteBinding, AddNoteViewModel>()
 
     }
 
-    private fun saveNoteOperation() = viewModel.saveNote(binding.etNote.text?.trim().toString())
+    override fun onBackPressed() {
+        if (binding.etNote.text.toString().isNotBlank()) saveNoteOperation()
+        finish()
+    }
+
+    private fun saveNoteOperation() {
+        viewModel.saveNote(binding.etNote.text?.trim().toString())
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
 
 
 }

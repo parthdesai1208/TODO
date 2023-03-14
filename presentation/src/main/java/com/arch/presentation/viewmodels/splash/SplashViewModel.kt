@@ -31,7 +31,7 @@ class SplashViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             flow<Boolean> {
-                delay(5000L)
+                delay(1000L)
                 emit(true)
             }.collect {
                 _navigationFlow.value = true
