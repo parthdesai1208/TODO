@@ -5,4 +5,4 @@ import com.arch.data.database.dao.base.BaseDao
 import com.arch.data.entity.local.NoteEntity
 
 @Dao
-abstract class NoteEntityDao : BaseDao<NoteEntity>
+abstract class NoteEntityDao : BaseDao<NoteEntity>,NoteEntityUseCaseDao
