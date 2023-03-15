@@ -35,14 +35,14 @@ android {
 
         release {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            resValue "string", "app_name", "Blueprint"
+            resValue "string", "app_name", "TODO"
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
         }
         debug {
             testCoverageEnabled true
-            resValue "string", "app_name", "Blueprint"
+            resValue "string", "app_name", "TODO"
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
@@ -51,7 +51,7 @@ android {
             initWith buildTypes.release
             applicationIdSuffix ".dev"
             versionNameSuffix "-DEV"
-            resValue "string", "app_name", "Blueprint DEV"
+            resValue "string", "app_name", "TODO DEV"
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
@@ -60,7 +60,7 @@ android {
             initWith buildTypes.release
             applicationIdSuffix ".qa"
             versionNameSuffix "-QA"
-            resValue "string", "app_name", "Blueprint QA"
+            resValue "string", "app_name", "TODO QA"
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
@@ -69,14 +69,14 @@ android {
             initWith buildTypes.release
             applicationIdSuffix ".staging"
             versionNameSuffix "-STAGING"
-            resValue "string", "app_name", "Blueprint STAGING"
+            resValue "string", "app_name", "TODO STAGING"
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
         }
         prod {
             initWith buildTypes.release
-            resValue "string", "app_name", "Blueprint App"
+            resValue "string", "app_name", "TODO App"
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
