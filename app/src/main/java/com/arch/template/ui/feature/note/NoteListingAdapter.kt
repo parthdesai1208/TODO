@@ -40,6 +40,10 @@ class NoteListingAdapter :
         }
     }
 
+    fun getNoteByPosition(position: Int): NotePresentation {
+        return getItem(position)
+    }
+
     fun addItemClickListener(listener: OnNoteClickListener) {
         this.listener = listener
     }

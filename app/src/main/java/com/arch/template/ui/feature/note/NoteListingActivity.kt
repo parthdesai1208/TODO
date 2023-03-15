@@ -6,12 +6,18 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.arch.presentation.model.NotePresentation
 import com.arch.presentation.viewmodels.note.NoteListingViewModel
 import com.arch.template.R
 import com.arch.template.base.BaseActivity
 import com.arch.template.databinding.ActivityNoteListingBinding
+import com.arch.template.utils.extension.showLongToast
+import com.arch.template.utils.extension.showShortToast
+import com.arch.utils.Resource
+import com.arch.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -34,14 +40,24 @@ class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListing
 
         noteListingAdapter.addItemClickListener(this)
         binding.rvNoteListing.adapter = noteListingAdapter
+        val swipeHandler = object : SwipeToDeleteCallback(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.deleteNote(noteListingAdapter.getNoteByPosition(viewHolder.absoluteAdapterPosition).noteId.toString())
+
+                val list = noteListingAdapter.currentList.toMutableList()
+                list.removeAt(viewHolder.absoluteAdapterPosition)
+                noteListingAdapter.submitList(list)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(binding.rvNoteListing)
 
         layoutManager = binding.rvNoteListing.layoutManager as LinearLayoutManager
 
         binding.fabAction.setOnClickListener {
             openActivityForResult.launch(
                 Intent(
-                    this@NoteListingActivity,
-                    AddNoteActivity::class.java
+                    this@NoteListingActivity, AddNoteActivity::class.java
                 )
             )
         }
@@ -54,18 +70,39 @@ class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListing
         lifecycleScope.launchWhenResumed {
             viewModel.positionFlow.collect {
                 binding.rvNoteListing.post {
-                    if (it <= noteListingAdapter.itemCount - 1)
-                        binding.rvNoteListing.scrollToPosition(it)
+                    if (it <= noteListingAdapter.itemCount - 1) binding.rvNoteListing.scrollToPosition(
+                        it
+                    )
                 }
             }
         }
-        fetchData(viewModel)
+        lifecycleScope.launchWhenResumed {
+            viewModel.noteDeleteFlow.collect {
+                when (it.status) {
+                    Status.LOADING -> {}
+                    Status.SUCCESS -> {
+                        if (it.data == true) {
+                            showShortToast(message = getString(R.string.deleteSuccessMessage))
+                        }
+                    }
+                    Status.ERROR -> {
+                        showErrorToast(it)
+                    }
+                }
+            }
+        }
+        fetchData(viewModel) //first time
+    }
+
+    private fun showErrorToast(it: Resource<Boolean>) {
+        it.error?.getFriendlyMessage()
+            ?.let { it1 -> if (it1.isNotBlank()) showLongToast(message = it1) }
     }
 
     private val openActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
-                fetchData(viewModel)
+                fetchData(viewModel) //after coming from addNoteActivity
             }
         }
 
@@ -82,14 +119,11 @@ class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListing
     }
 
     override fun onNoteClick(notePresentation: NotePresentation) {
-        openActivityForResult.launch(
-            Intent(
-                this@NoteListingActivity,
-                AddNoteActivity::class.java
-            ).apply {
-                putExtra(noteKey, notePresentation)
-            }
-        )
+        openActivityForResult.launch(Intent(
+            this@NoteListingActivity, AddNoteActivity::class.java
+        ).apply {
+            putExtra(noteKey, notePresentation)
+        })
     }
 
     companion object {

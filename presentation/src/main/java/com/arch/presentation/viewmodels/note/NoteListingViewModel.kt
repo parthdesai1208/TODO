@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingConfig
 import com.arch.entity.Note
+import com.arch.error.BaseError
 import com.arch.error.DatabaseError
 import com.arch.errors.android.handler.IAndroidExceptionHandler
 import com.arch.logger.AppLogger
@@ -12,8 +13,10 @@ import com.arch.permissions.android.IAndroidPermissionsController
 import com.arch.presentation.model.NotePresentation
 import com.arch.presentation.viewmodels.base.ObservableBaseViewModel
 import com.arch.usecase.GetNotesUseCase
+import com.arch.usecase.NoteDeleteUseCase
 import com.arch.utils.Either
 import com.arch.utils.RequestManager
+import com.arch.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteListingViewModel @Inject constructor(
+    private val noteDeleteUseCase: NoteDeleteUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val getNotesUseCase: GetNotesUseCase,
     exceptionHandler: IAndroidExceptionHandler,
@@ -36,6 +40,11 @@ class NoteListingViewModel @Inject constructor(
         MutableStateFlow(savedStateHandle[positionKey] ?: 0)
 
     val positionFlow: StateFlow<Int> = _positionFlow
+
+    private val _noteDeleteFlow: MutableStateFlow<Resource<Boolean>> =
+        MutableStateFlow(Resource.error(""))
+
+    val noteDeleteFlow: StateFlow<Resource<Boolean>> = _noteDeleteFlow
 
     companion object {
         const val positionKey = "position"
@@ -72,5 +81,27 @@ class NoteListingViewModel @Inject constructor(
     fun setScrollPosition(position: Int) {
         _positionFlow.value = position
         savedStateHandle[positionKey] = position
+    }
+
+    fun deleteNote(noteId: String) {
+        viewModelScope.launch {
+            exceptionHandler.handle {
+                val authParams = NoteDeleteUseCase.AuthNoteId(noteId)
+                object : RequestManager<Boolean>(params = authParams) {
+                    override suspend fun createCall(): Either<BaseError, Boolean> {
+                        return noteDeleteUseCase.execute(authParams)
+                    }
+                }.asFlow().collect {
+                    _noteDeleteFlow.value = Resource(
+                        status = it.status,
+                        data = it.data ?: false,
+                        message = it.message,
+                        error = it.error
+                    )
+                }
+            }.catch<Exception> {
+                false
+            }.execute()
+        }
     }
 }
