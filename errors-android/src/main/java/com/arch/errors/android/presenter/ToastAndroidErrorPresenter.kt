@@ -1,5 +1,3 @@
-
-
 package com.arch.errors.android.presenter
 
 import android.widget.Toast
@@ -14,10 +12,10 @@ class ToastAndroidErrorPresenter constructor(
 ) : IToastErrorPresenter(duration = duration), IAndroidErrorPresenter<String> {
 
     override fun show(throwable: Throwable, activity: FragmentActivity, data: String) {
-        Toast.makeText(
-            activity,
-            data,
-            duration.toAndroidCode()
-        ).show()
+        if (data.isNotBlank()) {
+            Toast.makeText(
+                activity, data, duration.toAndroidCode()
+            ).show()
+        }
     }
 }

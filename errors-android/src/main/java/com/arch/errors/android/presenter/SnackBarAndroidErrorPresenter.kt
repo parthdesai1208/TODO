@@ -22,12 +22,14 @@ class SnackBarAndroidErrorPresenter constructor(
             dialogFragment?.dialog?.window?.decorView
         } ?: return
         val contentView: View = decorView.findViewById(android.R.id.content) ?: return
-        val snackbar = Snackbar.make(
-            contentView,
-            data,//data.toString(activity),
-            duration.toAndroidCode()
-        )
-        snackbar.show()
+        if (data.isNotBlank()) {
+            val snackbar = Snackbar.make(
+                contentView,
+                data,//data.toString(activity),
+                duration.toAndroidCode()
+            )
+            snackbar.show()
+        }
     }
 
     private fun FragmentManager.findActiveDialogFragment(): DialogFragment? {
