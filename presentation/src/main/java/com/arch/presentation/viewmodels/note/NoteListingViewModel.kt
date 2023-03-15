@@ -104,4 +104,8 @@ class NoteListingViewModel @Inject constructor(
             }.execute()
         }
     }
+
+    fun clearNoteDeleteFlow(){
+        _noteDeleteFlow.value = Resource.error("")
+    }
 }

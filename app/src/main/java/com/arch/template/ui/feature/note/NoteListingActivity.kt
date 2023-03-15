@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +22,7 @@ import com.arch.utils.Resource
 import com.arch.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListingViewModel>(),
@@ -61,32 +64,38 @@ class NoteListingActivity : BaseActivity<ActivityNoteListingBinding, NoteListing
                 )
             )
         }
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.noteListingPagingFlow.collect {
-                noteListingAdapter.submitList(it)
-            }
-        }
-        lifecycleScope.launchWhenResumed {
-            viewModel.positionFlow.collect {
-                binding.rvNoteListing.post {
-                    if (it <= noteListingAdapter.itemCount - 1) binding.rvNoteListing.scrollToPosition(
-                        it
-                    )
+        lifecycleScope.launch {
+            // Repeat when the lifecycle is RESUMED, cancel when PAUSED
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                //in order to collect multiple flows we have to launch in separate coroutine block
+                launch {
+                    viewModel.noteListingPagingFlow.collect {
+                        noteListingAdapter.submitList(it)
+                    }
                 }
-            }
-        }
-        lifecycleScope.launchWhenResumed {
-            viewModel.noteDeleteFlow.collect {
-                when (it.status) {
-                    Status.LOADING -> {}
-                    Status.SUCCESS -> {
-                        if (it.data == true) {
-                            showShortToast(message = getString(R.string.deleteSuccessMessage))
+                launch {
+                    viewModel.positionFlow.collect {
+                        binding.rvNoteListing.post {
+                            if (it <= noteListingAdapter.itemCount - 1) binding.rvNoteListing.scrollToPosition(
+                                it
+                            )
                         }
                     }
-                    Status.ERROR -> {
-                        showErrorToast(it)
+                }
+                launch {
+                    viewModel.noteDeleteFlow.collect {
+                        when (it.status) {
+                            Status.LOADING -> {}
+                            Status.SUCCESS -> {
+                                if (it.data == true) {
+                                    showShortToast(message = getString(R.string.deleteSuccessMessage))
+                                }
+                            }
+                            Status.ERROR -> {
+                                showErrorToast(it)
+                            }
+                        }
+                        viewModel.clearNoteDeleteFlow() //necessary to clear flow because after deleting items, onConfiguration change success toast will emit again & again
                     }
                 }
             }

@@ -35,6 +35,7 @@ object AppDependencies {
     private val lifecycleLivedataKtx =
         "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}"
     private val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
+    private val lifeCycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}"
 
     //test libs
     private val junit = "junit:junit:${Versions.junit}"
@@ -86,6 +87,7 @@ object AppDependencies {
         add(crashlytics)
         add(reactiveStream)
         add(pagingAndroid)
+        add(lifeCycleKtx)
     }
 
     val androidTestLibraries = arrayListOf<String>().apply {

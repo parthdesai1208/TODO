@@ -5,7 +5,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.arch.presentation.model.NotePresentation
 import com.arch.presentation.viewmodels.note.AddNoteViewModel
 import com.arch.template.R
@@ -18,6 +20,7 @@ import com.arch.utils.Resource
 import com.arch.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -44,47 +47,52 @@ class AddNoteActivity : BaseActivity<ActivityAddNoteBinding, AddNoteViewModel>()
                 viewModel.deleteNote(it.toString())
             }
         }
-
-        lifecycleScope.launchWhenResumed {
-            viewModel.noteSavingFlow.collect {
-                when (it.status) {
-                    Status.LOADING -> {
-                        updateUI(true, loadingText = getString(R.string.saving))
-                    }
-                    Status.SUCCESS -> {
-                        if (it.data == true) {
-                            showShortToast(message = getString(R.string.saveSuccessMessage))
-                            finishActivityAndUpdateListOfListActivity()
-                        } else {
-                            showErrorToast(it)
+        lifecycleScope.launch {
+            // Repeat when the lifecycle is RESUMED, cancel when PAUSED
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                //in order to collect multiple flows we have to launch in separate coroutine block
+                launch {
+                    viewModel.noteSavingFlow.collect {
+                        when (it.status) {
+                            Status.LOADING -> {
+                                updateUI(true, loadingText = getString(R.string.saving))
+                            }
+                            Status.SUCCESS -> {
+                                if (it.data == true) {
+                                    showShortToast(message = getString(R.string.saveSuccessMessage))
+                                    finishActivityAndUpdateListOfListActivity()
+                                } else {
+                                    showErrorToast(it)
+                                }
+                                updateUI(false, loadingText = getString(R.string.saving))
+                            }
+                            Status.ERROR -> {
+                                showErrorToast(it)
+                                updateUI(false, loadingText = getString(R.string.saving))
+                            }
                         }
-                        updateUI(false, loadingText = getString(R.string.saving))
-                    }
-                    Status.ERROR -> {
-                        showErrorToast(it)
-                        updateUI(false, loadingText = getString(R.string.saving))
                     }
                 }
-            }
-        }
-        lifecycleScope.launchWhenResumed {
-            viewModel.noteDeleteFlow.collect {
-                when (it.status) {
-                    Status.LOADING -> {
-                        updateUI(true, loadingText = getString(R.string.deleting))
-                    }
-                    Status.SUCCESS -> {
-                        if (it.data == true) {
-                            showShortToast(message = getString(R.string.deleteSuccessMessage))
-                            finishActivityAndUpdateListOfListActivity()
-                        } else {
-                            showErrorToast(it)
+                launch {
+                    viewModel.noteDeleteFlow.collect {
+                        when (it.status) {
+                            Status.LOADING -> {
+                                updateUI(true, loadingText = getString(R.string.deleting))
+                            }
+                            Status.SUCCESS -> {
+                                if (it.data == true) {
+                                    showShortToast(message = getString(R.string.deleteSuccessMessage))
+                                    finishActivityAndUpdateListOfListActivity()
+                                } else {
+                                    showErrorToast(it)
+                                }
+                                updateUI(false, loadingText = getString(R.string.deleting))
+                            }
+                            Status.ERROR -> {
+                                showErrorToast(it)
+                                updateUI(false, loadingText = getString(R.string.deleting))
+                            }
                         }
-                        updateUI(false, loadingText = getString(R.string.deleting))
-                    }
-                    Status.ERROR -> {
-                        showErrorToast(it)
-                        updateUI(false, loadingText = getString(R.string.deleting))
                     }
                 }
             }
