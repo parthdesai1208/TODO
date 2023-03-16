@@ -1,78 +1,27 @@
-# mobile-android [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=NeoSOFT-Technologies_mobile-android&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=NeoSOFT-Technologies_mobile-android)
-
-mobile-android is an application development framework - a toolkit - for people who build android apps using kotlin. 
-Its goal is to enable you to develop projects much faster than you could if you were writing code from scratch, by providing a rich set of libraries for commonly needed tasks, as well as a simple interface and logical structure to access these libraries. 
-
-This lets you creatively focus on your project by minimizing the amount of code needed for a given task. 
-
-
-
-## How to use 👣
-
-The app is no-frills, but sufficiently complex that you can use it as a template to build upon.
-
-Just click on [![Use this template](https://camo.githubusercontent.com/2a7da879baa8087a1b6b8cfbf8a82c29358f7a34e890d272a3053872be6c20a7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d5573652532307468697325323074656d706c6174652d627269676874677265656e)](https://github.com/NeoSOFT-Technologies/mobile-android/generate) button to create a new repo starting from this template.
-
-
-## Screenshots
-
-​    <img src="screenshots/splash.JPEG" alt="splash" title="Splash Screen"  width="150" /><img src="screenshots/login.JPEG" alt="Login" title="Login screen"  width="150" /><img src="screenshots/dashboard.JPEG" alt="dashboard" title="Dashboard Screen"  width="150" />
-
-​    <img src="screenshots/profile.JPEG" alt="profile" title="Profile Screen"  width="150" /><img src="screenshots/location.JPEG" alt="location" title="Location Screen"  width="150" />
-
-
 Libraries Used
 --------------
 * [Architecture](https://developer.android.com/topic/libraries/architecture)
-  * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - Store UI-related data that isn't destroyed on app rotations. Easily schedule asynchronous tasks for optimal execution. 
-  * [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) - Build data objects that notify views when the underlying database changes. 
-  * [Lifecycles](https://developer.android.com/topic/libraries/architecture/lifecycle) - Create a UI that automatically responds to lifecycle events. 
+  * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - Store UI-related data that isn't destroyed on app rotations. Easily schedule asynchronous tasks for optimal execution.
+  * [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) - Build data objects that notify views when the underlying database changes.
+  * [Lifecycles](https://developer.android.com/topic/libraries/architecture/lifecycle) - Create a UI that automatically responds to lifecycle events.
   * [Data Binding](https://developer.android.com/topic/libraries/data-binding/) - Library that allows you to bind UI components in your layouts to data sources in your app using a declarative format rather than programmatically.
-* [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) 
+* [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection)
   * [HILT](https://developer.android.com/training/dependency-injection/hilt-android) - Hilt is built on top of the popular DI library Dagger to benefit from the compile time correctness, runtime performance, scalability, and Android Studio support that Dagger provides. Recommended by Android.
 * Logging
   * [Timber](https://github.com/JakeWharton/timber) - A logger with a small, extensible API which provides utility on top of Android's normal Log class.
   * [OkHttp Logging Interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor)
 * Database
   * [Room](https://developer.android.com/jetpack/androidx/releases/room) - Store offline database
-* Networking
-  * [Retrofit](https://square.github.io/retrofit/) - A type-safe HTTP client for Android
 * [Coroutines](https://developer.android.com/kotlin/coroutines) - Light wight threads for asynchronous programming
-* CI
-  - [GitHub Actions](https://github.com/features/actions)
-  - Automatic PR verification including tests, linters and sonarqube analysis
 * Gradle
   - [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
 * [Test](https://developer.android.com/training/testing/) - An Android testing framework for unit and runtime UI tests. Given When Then — Our Testing Approach
   * [Unit Tests](https://en.wikipedia.org/wiki/Unit_testing) ([JUnit 5](https://junit.org/junit5/) via [android-junit5](https://github.com/mannodermaus/android-junit5))
-  * [UT Tests](https://en.wikipedia.org/wiki/Graphical_user_interface_testing) ([Espresso](https://developer.android.com/training/testing/espresso))
-  * [Mockk](https://mockk.io/)
 
 
 
-Common Features
--------------------
 
-* Clean Architecture
-* Adhering to SOLID Principles 
-* Repository Pattern for code separations 
-* Dependency Injection 
-* Simple Network Layer 
-* Simple Data Layer 
-* Better Logging
-* Automatic Error Handling 
-* Media Selection Module  
-* Generic Permission Handler
-* Flavors Sample 
-* Unit & Integration Tests 
-* CI for build release 
-* CD (TODO) 
-* Use SonarQube Analysis & generate reports 
-* Crashlytics/Analytics
-
-
-
-## Gradle Setup 
+## Gradle Setup
 
 This template is using [**Gradle Kotlin DSL**](https://docs.gradle.org/current/userguide/kotlin_dsl.html) as well as the [Plugin DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block) to setup the build.
 
@@ -87,7 +36,7 @@ Dependencies are inside the *.kt files in the `buildSrc` folder. This provides c
 
   * Robust, testable, and maintainable app with classes for managing your UI component lifecycle and handling data persistence.
 
-  To learn more about the different architecture approach see, [Common Architecture Design Patterns](wiki/docs/discussion/COMMON_ANDROID_ARCHITECTURAL_PATTERNS.md) 
+  To learn more about the different architecture approach see, [Common Architecture Design Patterns](wiki/docs/discussion/COMMON_ANDROID_ARCHITECTURAL_PATTERNS.md)
 
 * [**Clean Architecture**](wiki/docs/modules/app-clean-arch-overview.md) for separation of concern & **modular approach**
 
@@ -96,7 +45,7 @@ Dependencies are inside the *.kt files in the `buildSrc` folder. This provides c
 * Every Activity will have a DataBinding object and ViewModel object defined in this way:
 
 ```KOTLIN
-abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
+abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() 
 ```
 
 ### Clean Architecture & Components in Android App
@@ -189,43 +138,8 @@ app
 
 
 
-#### Automated tests
-
-Automated tests are usually placed into the `test` or, less commonly, into the `tests` folder.
-
-> **Q: Why tests are placed into a separate folder, as opposed to having them closer to the code under test?**
->
-> **A:** Because you don't want to test the code, you want to test the *program*.
-
-```
-.
-├── ...
-├── src
-│   ├── androidTest/  # Instrumented test, which will execute on an Android device
-│   ├── ..
-│   └── test/         # Example local unit test, which will execute on the development machine (host)
-└── ...
-```
 
 
-
-## CI Pipeline
-
-CI is utilizing [GitHub Actions](https://github.com/features/actions). Complete GitHub Actions config is located in the [.github/workflows](.github/workflows) folder.
-
-
-
-## PR Verification
-
-Series of workflows runs (in parallel) for every opened PR and after merging PR to `main` branch:
-
-- `./gradlew lintDebug` - Runs Android lint
-- `./gradlew testDebugUnitTest` - Run unit tests
-- `./gradlew build sonarqube --info` - Analyzing Using Gradle Sonar Plugin
-
-To learn more about contributing to this project see [Guiding principles for contributing](wiki/docs/contribution/CONTRIBUTING.md)
-
-### 
 
 ## Coding Guidelines
 
@@ -239,21 +153,15 @@ To learn more about contributing to this project see [Guiding principles for con
 
 * [Why Kotlin?](wiki/docs/discussion/WHY_KOTLIN.md)
 * [Why MVVM & Common Android Archiectural Patterns](wiki/docs/discussion/COMMON_ANDROID_ARCHITECTURAL_PATTERNS.md)
- * [When I can choose Coroutines or RX-Kotlin to do some behaviour ](wiki/docs/discussion/WHEN_COROUTINES_AND_RxJAVA.md)
- * [Why Dependency Injection? Why HILT? ](wiki/docs/discussion/WHY_DEPENDENCY_INJECTION.md)
- * [Why should you use the repository pattern?](wiki/docs/discussion/WHY_REPOSITORY.md)
-
-
-
-## Upcoming Improvements
-
-Checklist of all upcoming [enhancements](https://github.com/NeoSOFT-Technologies/mobile-android/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Aenhancement).
-
+* [When I can choose Coroutines or RX-Kotlin to do some behaviour ](wiki/docs/discussion/WHEN_COROUTINES_AND_RxJAVA.md)
+* [Why Dependency Injection? Why HILT? ](wiki/docs/discussion/WHY_DEPENDENCY_INJECTION.md)
+* [Why should you use the repository pattern?](wiki/docs/discussion/WHY_REPOSITORY.md)
 
 
 ## Inspiration
 
-This is project is a sample, to inspire you and should handle most of the common cases, but please take a look at additional resources.
+This project is a sample TOOD app, built using [this template](httpshttps://github.com/NeoSOFT-Technologies/mobile-android)
+Just click on [![Use this template](https://camo.githubusercontent.com/2a7da879baa8087a1b6b8cfbf8a82c29358f7a34e890d272a3053872be6c20a7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d5573652532307468697325323074656d706c6174652d627269676874677265656e)](https://github.com/NeoSOFT-Technologies/mobile-android/generate) button to create a new repo.
 
 ### Cheat sheet
 
@@ -284,11 +192,4 @@ Other high-quality projects will help you to find solutions that work for your p
 
 ## Contributing to this Project
 
-Contributions are welcome from anyone and everyone. We encourage you to review the [guiding principles for contributing](wiki/docs/contribution/CONTRIBUTING.md)
-
-
-
-## App Versioning Syntax
-
-[Android Mobile App Versioning](wiki/docs/guide/VERSIONING_GUIDE.md)
-
+Contributions are welcome from anyone and everyone. 
